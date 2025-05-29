@@ -151,8 +151,23 @@ Y_val = keras.utils.to_categorical(Y_val, 10)
 
 ### Normalizacion
 
+La normalizacion consiste en convertir todos los valores de las features (los pixeles de las imagenes) en valores entre 0 y 1.
+
+Lo logramos a traves del siguiente codigo:
+
+```
+# normalizacion
+X_train = X_train / 255.0
+X_val = X_val / 255.0
+X_test = X_test / 255.0
+
+```
+
+Teniendo en cuenta que el valor maximo de cada uno de los pixeles es 255.
 
 ## Entrenamiento
+
+En el proceso de entrenamiento, 
 
 ## Evaluacion
 
