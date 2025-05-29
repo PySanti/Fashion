@@ -73,9 +73,65 @@ Cada target se corresponde con lo siguiente:
 9: Ankle boot (Botín)
 ```
 
+### Division del conjunto de datos
+
+Dividimos el conjunto de test en dos para poder contar tambien con un conjunto de validacion. Esto lo lograremos usando la funcion `train_test_split` de `scikit-learn`.
+
+```
+Shape del val
+(6000, 28, 28)
+(6000,)
+Proporcion de targets del val
+5    600
+4    600
+6    600
+0    600
+1    600
+8    600
+3    600
+2    600
+9    600
+7    600
+Name: count, dtype: int64
+
+
+
+Shape del test
+(4000, 28, 28)
+(4000,)
+Proporcion de targets del test
+0    400
+7    400
+5    400
+3    400
+4    400
+1    400
+8    400
+2    400
+6    400
+9    400
+
+```
+
 ### Conversion de targets
 
-Teniendo en cuenta que es un problema de clasificacion multinomial, las neuronas de la output layer deberan implementar `softmax` como funcion de activacion, para ello, debemos modificar el formato de los targets del conjunto, usando el metodo `.to_categorical()`.
+Teniendo en cuenta que es un problema de clasificacion multinomial, las neuronas de la output layer deberan implementar `softmax` como funcion de activacion, para ello, debemos modificar el formato de los targets del conjunto, usando la funcion  `keras.utils.to_categorical()`:
+
+```
+9 : [0. 0. 0. 0. 0. 0. 0. 0. 0. 1.]
+0 : [1. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+0 : [1. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+3 : [0. 0. 0. 1. 0. 0. 0. 0. 0. 0.]
+0 : [1. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+2 : [0. 0. 1. 0. 0. 0. 0. 0. 0. 0.]
+7 : [0. 0. 0. 0. 0. 0. 0. 1. 0. 0.]
+2 : [0. 0. 1. 0. 0. 0. 0. 0. 0. 0.]
+5 : [0. 0. 0. 0. 0. 1. 0. 0. 0. 0.]
+5 : [0. 0. 0. 0. 0. 1. 0. 0. 0. 0.]
+...
+```
+
+
 
 ### Normalizacion
 
