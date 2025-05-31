@@ -1,8 +1,8 @@
+from keras.src.backend.config import max_epochs
 from tensorflow import keras
-import keras_tuner as kt
-from utils.show_image import show_image
-import pandas as pd
 from sklearn.model_selection import train_test_split
+from utils.model_builder import model_builder
+import keras_tuner as kt
 
 # carga de datos
 (X_train, Y_train), (X_test, Y_test) =  keras.datasets.fashion_mnist.load_data()
@@ -17,6 +17,34 @@ Y_val = keras.utils.to_categorical(Y_val, 10)
 
 # normalizacion
 X_train = X_train / 255.0
-X_val = X_val / 255.0
-X_test = X_test / 255.0
+X_val   = X_val / 255.0
+X_test  = X_test / 255.0
+
+
+# Hypertunnig
+
+tuner = kt.Hyperband(
+    model_builder,
+    objective='val_precision',
+    max_epochs=10,
+    directory="train_results",
+    project_name="Fashion"
+)
+
+tuner.search_space_summary()
+
+tuner.search(
+    X_train,
+    Y_train,
+    validation_data=(X_val, Y_val),
+)
+
+
+best_hps = tuner.get_best_hyperparameters(num_trials=1)[0]
+print("Mejores hiperparametros")
+print(best_hps)
+
+model = tuner.hypermodel.build(best_hps)
+# Entrenar el modelo final con los mejores hiperparámetros
+model.fit(X_train, Y_train, epochs=15, validation_data=(X_val, Y_val))
 
