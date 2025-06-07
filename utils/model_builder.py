@@ -24,7 +24,7 @@ def model_builder(hp):
     net.compile(
         loss="categorical_crossentropy", 
         optimizer=optimizers.Adam(learning_rate=learning_rate), 
-        metrics=["accuracy", "precision"])
+        metrics=["accuracy"])
 
     return net
 

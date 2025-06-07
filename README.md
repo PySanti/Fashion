@@ -356,3 +356,72 @@ Precision en test: 0.0
 ```
 
 Resultados sin mucho sentido.
+
+Ademas de que la precision esta dando resultados extranios, ademas esta disminuye con el pasar de las epocas, mientras que `loss` y `accuracy` aumentan.
+
+
+Despues de investigar un poco del problema, nos dimos cuenta de que seguramente el calculo de la metrica `precision` no estaba siendo lo suficientemente precisa dado que es un problema de clasificacion multiclase, ademas, en este caso, teniendo en cuenta de que es un conjunto de datos balanceado, es conveniente usar `accuracy`.
+
+Decidimos volver a correr el algoritmo Hyperband pero ahora utilizando como `objective` la metrica `accuracy`.
+
+Luego, obtuvimos los siguientes resultados:
+
+```
+Mejores hiperparametros
+{'n_hidden_layers': 3, 'learning_rate': 0.0001, 'layer_units_0': 504, 'layer_units_1': 288, 'layer_units_2': 408, 'layer_units_3': 192, 'tuner/epochs': 40, 'tuner/initial_epoch': 20, 'tuner/bracket': 5, 'tuner/round': 5, 'tuner/trial_id': '0072', 'layer_units_4': 96, 'layer_units_5': 432, 'layer_units_6': 96, 'layer_units_7': 456, 'layer_units_8': 192}
+/home/santiago/Escritorio/Aprendizaje ML/practicas/session10/Fashion/dep/lib/python3.12/site-packages/keras/src/layers/reshaping/flatten.py:37: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(**kwargs)
+Epoch 1/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 15s 7ms/step - accuracy: 0.7631 - loss: 0.7460 - val_accuracy: 0.8472 - val_loss: 0.4339
+Epoch 2/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 14s 7ms/step - accuracy: 0.8634 - loss: 0.3815 - val_accuracy: 0.8643 - val_loss: 0.3781
+Epoch 3/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 14s 7ms/step - accuracy: 0.8787 - loss: 0.3340 - val_accuracy: 0.8640 - val_loss: 0.3706
+Epoch 4/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 14s 7ms/step - accuracy: 0.8876 - loss: 0.3039 - val_accuracy: 0.8673 - val_loss: 0.3577
+Epoch 5/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 14s 7ms/step - accuracy: 0.8967 - loss: 0.2806 - val_accuracy: 0.8768 - val_loss: 0.3436
+Epoch 6/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 14s 8ms/step - accuracy: 0.9028 - loss: 0.2632 - val_accuracy: 0.8803 - val_loss: 0.3372
+Epoch 7/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 14s 7ms/step - accuracy: 0.9062 - loss: 0.2490 - val_accuracy: 0.8762 - val_loss: 0.3402
+Epoch 8/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 14s 7ms/step - accuracy: 0.9129 - loss: 0.2376 - val_accuracy: 0.8802 - val_loss: 0.3350
+Epoch 9/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 14s 7ms/step - accuracy: 0.9174 - loss: 0.2269 - val_accuracy: 0.8818 - val_loss: 0.3412
+Epoch 10/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 14s 8ms/step - accuracy: 0.9219 - loss: 0.2125 - val_accuracy: 0.8775 - val_loss: 0.3486
+Epoch 11/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 14s 8ms/step - accuracy: 0.9251 - loss: 0.2011 - val_accuracy: 0.8915 - val_loss: 0.3147
+Epoch 12/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 14s 7ms/step - accuracy: 0.9298 - loss: 0.1891 - val_accuracy: 0.8850 - val_loss: 0.3380
+Epoch 13/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 14s 7ms/step - accuracy: 0.9338 - loss: 0.1779 - val_accuracy: 0.8922 - val_loss: 0.3250
+Epoch 14/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 14s 7ms/step - accuracy: 0.9383 - loss: 0.1667 - val_accuracy: 0.8933 - val_loss: 0.3274
+Epoch 15/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 14s 8ms/step - accuracy: 0.9387 - loss: 0.1653 - val_accuracy: 0.8900 - val_loss: 0.3424
+Epoch 16/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 14s 7ms/step - accuracy: 0.9441 - loss: 0.1520 - val_accuracy: 0.8887 - val_loss: 0.3509
+Epoch 17/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 14s 7ms/step - accuracy: 0.9469 - loss: 0.1446 - val_accuracy: 0.8880 - val_loss: 0.3486
+Epoch 18/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 14s 7ms/step - accuracy: 0.9475 - loss: 0.1390 - val_accuracy: 0.8958 - val_loss: 0.3293
+Epoch 19/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 14s 7ms/step - accuracy: 0.9525 - loss: 0.1284 - val_accuracy: 0.8950 - val_loss: 0.3503
+Epoch 20/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 14s 7ms/step - accuracy: 0.9550 - loss: 0.1216 - val_accuracy: 0.8927 - val_loss: 0.3514
+Restoring model weights from the end of the best epoch: 18.
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 2ms/step - accuracy: 0.9014 - loss: 0.3159 
+Loss en test: 0.3298203945159912
+Accuracy en test: 0.8989999890327454
+```
+
+
+![Imagen no encontrada](./images/val_and_accuracy.png)
+
+Como vemos se empieza a generar overfitting mas o menos a partir de la 3ra epoca. Sin embargo, se alcanzaron resultados mucho mas estables y con bastante mas sentido.
+
+
+
+#### Recordar : graficas de entrenamiento para loss y accuracy, clasificacion_report y matriz de confusion.
