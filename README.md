@@ -9,7 +9,8 @@ Además, implementar técnicas de `hypertunning` a través de la librería `kera
 
 ## Preprocesamiento
 
-### Visualizacion del conjunto de datos
+### Visualización del conjunto de datos
+ 
 
 En las primeras observaciones del conjunto, encontramos lo siguiente:
 
@@ -26,7 +27,8 @@ El conjunto de entrenamiento cuenta con 60.000 registros de matrices de 28x28.\
 El conjunto de test cuenta con 10.000 registros de matrices de 28x28.
 
 
-Las imagenes cuentan con el siguiente formato:
+Las imágenes cuentan con el siguiente formato:
+ 
 
 
 ```
@@ -34,9 +36,11 @@ Las imagenes cuentan con el siguiente formato:
     0   0   0   0   0   0   0   0   0   0]
 ```
 
-28 filas, donde cada fila cuenta con valores enteros entre 0 y 255 que representa la escala de gris.
+28 filas, donde cada fila cuenta con valores enteros entre 0 y 255 que representan la escala de gris.
 
-Sabemos que cada registro de matrix de 28x28 representa una prenda de moda. Para revisarlo, creamos una funcion para graficar usando `matplotlib` y encontramos lo siguiente:
+Sabemos que cada registro de matriz de 28x28 representa una prenda de moda. Para revisarlo, creamos una función para graficar usando `matplotlib` y encontramos lo siguiente:
+
+ 
 
 ![Imagen no encontrada](./images/imagen_1.png)
 
@@ -71,9 +75,9 @@ Cada target se corresponde con lo siguiente:
 9: Ankle boot (Botín)
 ```
 
-### Division del conjunto de datos
+### División del conjunto de datos
 
-Dividimos el conjunto de test en dos para poder contar tambien con un conjunto de validacion. Esto lo lograremos usando la funcion `train_test_split` de `scikit-learn`.
+Dividimos el conjunto de test en dos para poder contar también con un conjunto de validación. Esto lo lograremos usando la función `train_test_split` de `scikit-learn`.
 
 ```
 Shape del val
@@ -111,9 +115,9 @@ Proporcion de targets del test
 
 ```
 
-### Conversion de targets
+### Conversión de targets
 
-Teniendo en cuenta que es un problema de clasificacion multinomial, las neuronas de la output layer deberan implementar `softmax` como funcion de activacion, para ello, debemos modificar el formato de los targets del conjunto, usando la funcion  `keras.utils.to_categorical()`:
+Teniendo en cuenta que es un problema de clasificación multinomial, las neuronas del output layer deberán implementar `softmax` como función de activación. Para ello, debemos modificar el formato de los targets del conjunto, usando la función  `keras.utils.to_categorical()`:
 
 ```
 9 : [0. 0. 0. 0. 0. 0. 0. 0. 0. 1.]
@@ -129,7 +133,10 @@ Teniendo en cuenta que es un problema de clasificacion multinomial, las neuronas
 ...
 ```
 
-A traves del siguiente codigo se transformaron los targets para los 3 conjuntos (validacion, pruebas y entrenamiento):
+
+A través del siguiente código se transformaron los targets para los 3 conjuntos (validación, pruebas y entrenamiento):
+
+
 
 ```
 from tensorflow import keras
@@ -147,11 +154,14 @@ Y_val = keras.utils.to_categorical(Y_val, 10)
 
 ```
 
-### Normalizacion
 
-La normalizacion consiste en convertir todos los valores de las features (los pixeles de las imagenes) en valores entre 0 y 1.
+### Normalización
 
-Lo logramos a traves del siguiente codigo:
+La normalización consiste en convertir todos los valores de las features (los píxeles de las imágenes) en valores entre 0 y 1.
+
+Lo logramos a través del siguiente código:
+
+
 
 ```
 # normalizacion
@@ -161,13 +171,15 @@ X_test = X_test / 255.0
 
 ```
 
-Teniendo en cuenta que el valor maximo de cada uno de los pixeles es 255.
+Teniendo en cuenta que el valor máximo de cada uno de los píxeles es 255.
 
 ## Entrenamiento
 
-En el proceso de entrenamiento, utilizamos `keras_tuner`, especificamente para el hypertunning.
+En el proceso de entrenamiento, utilizamos `keras_tuner`, específicamente para el hypertunning.
 
-En dicho contexto, utilizamos el siguiente codigo:
+En dicho contexto, utilizamos el siguiente código:
+
+
 
 ```
 # main.py
@@ -260,7 +272,9 @@ def model_builder(hp):
 
 ```
 
-A traves del codigo anterior, encontramos que la mejor combinacion de hiperparametros para nuestro caso es la siguiente:
+A través del código anterior, encontramos que la mejor combinación de hiperparámetros para nuestro caso es la siguiente:
+
+
 
 
 ```
@@ -268,9 +282,9 @@ A traves del codigo anterior, encontramos que la mejor combinacion de hiperparam
 ```
 
 
-## Evaluacion
+## Evaluación
 
-Luego, utilizando la combinacion de hiperparametros anterior, encontramos los siguientes resultados.
+Luego, utilizando la combinación de hiperparámetros anterior, encontramos los siguientes resultados.
 
 
 ```
@@ -302,16 +316,16 @@ Precision en test: 0.8801764845848083
 
 ```
 
-Como vemos, la precision para validacion empieza a disminuir luego de la 2da epoca. Esto es un sintoma claro de `overfitting`: la red esta encontrando muy rapidamente los valores mas optimos para los parametros y luego de la 2da epoca empieza a sobreajustar.
+Como vemos, la precisión para validación empieza a disminuir luego de la 2.ª época. Esto es un síntoma claro de `overfitting`: la red está encontrando muy rápidamente los valores más óptimos para los parámetros y luego de la 2.ª época empieza a sobreajustar.
 
 Esto se debe a varias cosas:
 
 1- Adam.\
-2- Una arquitectura quizas demasiado compleja.\
-3- La no implementacion de tecnicas de regularizacion.\
-4- Una cantidad de registros no demasiado grande.\
+2- Una arquitectura quizá demasiado compleja
+3- La no implementación de técnicas de regularización
+4- Una cantidad de registros no demasiado grande
 
-Luego de implementar la tecnica `EarlyStopping` para almacenar el valor de los parametros para la mejor epoca, encontramos los siguientes resultados.
+Luego de implementar la técnica `EarlyStopping` para almacenar el valor de los parámetros para la mejor época, encontramos los siguientes resultados.
 
 ```
 Epoch 1/20
@@ -357,12 +371,13 @@ Precision en test: 0.0
 
 Resultados sin mucho sentido.
 
-Ademas de que la precision esta dando resultados extranios, ademas esta disminuye con el pasar de las epocas, mientras que `loss` y `accuracy` aumentan.
+
+Además de que la precisión está dando resultados extraños, además esta disminuye con el pasar de las épocas, mientras que `loss` y `accuracy` aumentan.
 
 
-Despues de investigar un poco del problema, nos dimos cuenta de que seguramente el calculo de la metrica `precision` no estaba siendo lo suficientemente precisa dado que es un problema de clasificacion multiclase, ademas, en este caso, teniendo en cuenta de que es un conjunto de datos balanceado, es conveniente usar `accuracy`.
+Después de investigar un poco del problema, nos dimos cuenta de que seguramente el cálculo de la métrica `precision` no estaba siendo lo suficientemente precisa dado que es un problema de clasificación multiclase, además, en este caso, teniendo en cuenta de que es un conjunto de datos balanceado, es conveniente usar `accuracy`.
 
-Decidimos volver a correr el algoritmo Hyperband pero ahora utilizando como `objective` la metrica `accuracy`.
+Decidimos volver a correr el algoritmo Hyperband pero ahora utilizando como `objective` la métrica `accuracy`.
 
 Luego, obtuvimos los siguientes resultados:
 
@@ -429,7 +444,4 @@ Accuracy en test: 0.8989999890327454
 
 ![Imagen no encontrada](./images/val_and_accuracy.png)
 
-
-Como vemos se empieza a generar overfitting mas o menos a partir de la 3ra epoca. Sin embargo, se alcanzaron resultados mucho mas estables y con bastante mas sentido.
-
-
+Como vemos, se empieza a generar overfitting más o menos a partir de la 3.ª época. Sin embargo, se alcanzaron resultados mucho más estables y con bastante más sentido.
