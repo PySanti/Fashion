@@ -321,8 +321,8 @@ Como vemos, la precisión para validación empieza a disminuir luego de la 2.ª 
 Esto se debe a varias cosas:
 
 1- Adam.\
-2- Una arquitectura quizá demasiado compleja
-3- La no implementación de técnicas de regularización
+2- Una arquitectura quizá demasiado compleja\
+3- La no implementación de técnicas de regularización\
 4- Una cantidad de registros no demasiado grande
 
 Luego de implementar la técnica `EarlyStopping` para almacenar el valor de los parámetros para la mejor época, encontramos los siguientes resultados.
