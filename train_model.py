@@ -27,10 +27,10 @@ X_test  = X_test / 255.0
 tuner = kt.Hyperband(
     model_builder,
     objective='val_accuracy',
-    max_epochs=40,
+    max_epochs=20,
+    factor=2,
     directory="train_results",
     project_name="Fashion",
-    factor=2
 )
 
 print(" ~~~~~~~~ Espacio de busqueda de hiperparametros")
