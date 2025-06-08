@@ -294,7 +294,7 @@ Epoch 9/10
 1875/1875 ━━━━━━━━━━━━━━━━━━━━ 13s 7ms/step - accuracy: 0.7944 - loss: 0.6715 - precision: 0.8904 - val_accuracy: 0.7863 - val_loss: 0.6688 - val_precision: 0.8833
 Epoch 10/10
 1875/1875 ━━━━━━━━━━━━━━━━━━━━ 13s 7ms/step - accuracy: 0.7975 - loss: 0.6537 - precision: 0.8873 - val_accuracy: 0.7933 - val_loss: 0.6479 - val_precision: 0.8841
-125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 2ms/step - accuracy: 0.7878 - loss: 0.6441 - precision: 0.8850 
+
 Loss en test: 0.6546028852462769
 Accuracy en test: 0.6546028852462769
 Precision en test: 0.8801764845848083
@@ -306,10 +306,10 @@ Como vemos, la precision para validacion empieza a disminuir luego de la 2da epo
 
 Esto se debe a varias cosas:
 
-1- Adam.
-2- Una arquitectura quizas demasiado compleja.
-3- La no implementacion de tecnicas de regularizacion.
-4- Una cantidad de registros no demasiado grande.
+1- Adam.\
+2- Una arquitectura quizas demasiado compleja.\
+3- La no implementacion de tecnicas de regularizacion.\
+4- Una cantidad de registros no demasiado grande.\
 
 Luego de implementar la tecnica `EarlyStopping` para almacenar el valor de los parametros para la mejor epoca, encontramos los siguientes resultados.
 
@@ -417,11 +417,19 @@ Loss en test: 0.3298203945159912
 Accuracy en test: 0.8989999890327454
 ```
 
+Basicamente:
+
+```
+Restoring model weights from the end of the best epoch: 18.
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 2ms/step - accuracy: 0.9014 - loss: 0.3159 
+
+Loss en test: 0.3298203945159912
+Accuracy en test: 0.8989999890327454
+```
 
 ![Imagen no encontrada](./images/val_and_accuracy.png)
+
 
 Como vemos se empieza a generar overfitting mas o menos a partir de la 3ra epoca. Sin embargo, se alcanzaron resultados mucho mas estables y con bastante mas sentido.
 
 
-
-#### Recordar : graficas de entrenamiento para loss y accuracy, clasificacion_report y matriz de confusion.
