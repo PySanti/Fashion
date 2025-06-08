@@ -456,3 +456,101 @@ Luego, para mejorar aún más el rendimiento del modelo, quise probar implementa
 Para ello, tuvimos que volver a correr Hyperband, pero ahora utilizando una arquitectura que implementase las técnicas de regularización antes mencionadas.
 
 Utilizando el siguiente código:
+
+```
+from tensorflow import keras
+from keras import layers
+from keras import optimizers
+from keras.regularizers import l2
+
+def model_builder(hp):
+    net = keras.Sequential()
+
+    n_hidden_layers         = hp.Int('n_hidden_layers', min_value=1, max_value=4, step=1)
+    learning_rate           = hp.Choice('learning_rate', values=[1e-3, 1e-4, 1e-5, 1e-6])
+
+
+    # input layer
+    net.add(layers.Flatten(input_shape=(28,28)))
+
+    # hidden layers
+    # busqueda de numero de capas optima
+    for a in range(n_hidden_layers):
+        # busqueda de numero de neuronas optimo
+        units_count = hp.Int(f'layer_units_{a}', min_value=24, max_value=624, step=24)
+        # busqueda de hiperparametro de regularizacion optimo
+        regu = hp.Choice(f'layer_regu_{a}', values=[1e-3, 1e-4, 1e-5, 1e-6])
+        # busqueda de dropout rate optimo
+        drop = hp.Float(f'layer_drop_{a}', min_value=0.1, max_value=0.3, sampling="log")
+
+        net.add(layers.Dense(units=units_count, activation='relu', kernel_regularizer=l2(regu)))
+        net.add(layers.Dropout(rate=drop))
+    
+    # output layer
+    net.add(layers.Dense(10, activation='softmax'))
+
+    net.compile(
+        loss="categorical_crossentropy", 
+        optimizer=optimizers.Adam(learning_rate=learning_rate), 
+        metrics=["accuracy"])
+
+    return net
+
+
+```
+
+Obtuvimos los siguientes resultados:
+
+```
+Mejores hiperparametros
+{'n_hidden_layers': 4, 'learning_rate': 0.0001, 'layer_units_0': 528, 'layer_regu_0': 0.0001, 'layer_drop_0': 0.11191373439632989, 'layer_units_1': 432, 'layer_regu_1': 1e-06, 'layer_drop_1': 0.13600391247756266, 'layer_units_2': 264, 'layer_regu_2': 1e-05, 'layer_drop_2': 0.2584027268433304, 'layer_units_3': 480, 'layer_regu_3': 0.0001, 'layer_drop_3': 0.12374948499613173, 'tuner/epochs': 20, 'tuner/initial_epoch': 10, 'tuner/bracket': 2, 'tuner/round': 2, 'tuner/trial_id': '0071'}
+Epoch 1/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 22s 11ms/step - accuracy: 0.6869 - loss: 0.9886 - val_accuracy: 0.8438 - val_loss: 0.5272
+Epoch 2/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 21s 11ms/step - accuracy: 0.8496 - loss: 0.5118 - val_accuracy: 0.8578 - val_loss: 0.4852
+Epoch 3/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 21s 11ms/step - accuracy: 0.8660 - loss: 0.4545 - val_accuracy: 0.8652 - val_loss: 0.4607
+Epoch 4/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 21s 11ms/step - accuracy: 0.8799 - loss: 0.4217 - val_accuracy: 0.8702 - val_loss: 0.4347
+Epoch 5/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 21s 11ms/step - accuracy: 0.8850 - loss: 0.4031 - val_accuracy: 0.8738 - val_loss: 0.4429
+Epoch 6/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 21s 11ms/step - accuracy: 0.8930 - loss: 0.3742 - val_accuracy: 0.8738 - val_loss: 0.4302
+Epoch 7/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 21s 11ms/step - accuracy: 0.8961 - loss: 0.3625 - val_accuracy: 0.8735 - val_loss: 0.4275
+Epoch 8/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 21s 11ms/step - accuracy: 0.9029 - loss: 0.3401 - val_accuracy: 0.8840 - val_loss: 0.3997
+Epoch 9/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 21s 11ms/step - accuracy: 0.9022 - loss: 0.3355 - val_accuracy: 0.8860 - val_loss: 0.4020
+Epoch 10/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 21s 11ms/step - accuracy: 0.9093 - loss: 0.3175 - val_accuracy: 0.8873 - val_loss: 0.3910
+Epoch 11/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 21s 11ms/step - accuracy: 0.9101 - loss: 0.3095 - val_accuracy: 0.8875 - val_loss: 0.3902
+Epoch 12/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 21s 11ms/step - accuracy: 0.9150 - loss: 0.2947 - val_accuracy: 0.8855 - val_loss: 0.3901
+Epoch 13/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 21s 11ms/step - accuracy: 0.9180 - loss: 0.2923 - val_accuracy: 0.8863 - val_loss: 0.3886
+Epoch 14/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 22s 11ms/step - accuracy: 0.9220 - loss: 0.2776 - val_accuracy: 0.8902 - val_loss: 0.3750
+Epoch 15/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 21s 11ms/step - accuracy: 0.9233 - loss: 0.2697 - val_accuracy: 0.8878 - val_loss: 0.3926
+Epoch 16/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 21s 11ms/step - accuracy: 0.9254 - loss: 0.2641 - val_accuracy: 0.8890 - val_loss: 0.3883
+Epoch 17/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 21s 11ms/step - accuracy: 0.9283 - loss: 0.2576 - val_accuracy: 0.8905 - val_loss: 0.3856
+Epoch 18/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 21s 11ms/step - accuracy: 0.9263 - loss: 0.2540 - val_accuracy: 0.8905 - val_loss: 0.3756
+Epoch 19/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 21s 11ms/step - accuracy: 0.9313 - loss: 0.2447 - val_accuracy: 0.8953 - val_loss: 0.3710
+Epoch 20/20
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 21s 11ms/step - accuracy: 0.9330 - loss: 0.2411 - val_accuracy: 0.8935 - val_loss: 0.3833
+Restoring model weights from the end of the best epoch: 19.
+125/125 ━━━━━━━━━━━━━━━━━━━━ 0s 3ms/step - accuracy: 0.8971 - loss: 0.3718 
+Loss en test: 0.3817393183708191
+Accuracy en test: 0.8970000147819519
+```
+
+
+![Imagen no encontrada](./images/image_2.png)
+
+Resultados no muy diferentes a los anteriores.
