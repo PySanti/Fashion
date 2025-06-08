@@ -445,3 +445,5 @@ Accuracy en test: 0.8989999890327454
 ![Imagen no encontrada](./images/val_and_accuracy.png)
 
 Como vemos, se empieza a generar overfitting más o menos a partir de la 3.ª época. Sin embargo, se alcanzaron resultados mucho más estables y con bastante más sentido.
+
+Ahora, buscaremos implementar tecnicas de regularizacion para mejorar aun mas los resultados y comparar.
