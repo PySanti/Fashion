@@ -321,8 +321,8 @@ Como vemos, la precisión para validación empieza a disminuir luego de la 2.ª 
 Esto se debe a varias cosas:
 
 1- Adam.\
-2- Una arquitectura quizá demasiado compleja\
-3- La no implementación de técnicas de regularización\
+2- Una arquitectura quizá demasiado compleja
+3- La no implementación de técnicas de regularización
 4- Una cantidad de registros no demasiado grande
 
 Luego de implementar la técnica `EarlyStopping` para almacenar el valor de los parámetros para la mejor época, encontramos los siguientes resultados.
@@ -446,4 +446,13 @@ Accuracy en test: 0.8989999890327454
 
 Como vemos, se empieza a generar overfitting más o menos a partir de la 3.ª época. Sin embargo, se alcanzaron resultados mucho más estables y con bastante más sentido.
 
-Ahora, buscaremos implementar tecnicas de regularizacion para mejorar aun mas los resultados y comparar.
+
+Ahora, implementaremos técnicas de regularización.
+
+### L2 - Dropout
+
+Luego, para mejorar aún más el rendimiento del modelo, quise probar implementando técnicas de regularización, en este caso `l2` y `dropout`.
+
+Para ello, tuvimos que volver a correr Hyperband, pero ahora utilizando una arquitectura que implementase las técnicas de regularización antes mencionadas.
+
+Utilizando el siguiente código:
